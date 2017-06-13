@@ -1,0 +1,20 @@
+
+Search for kafka image:
+>> docker search kafka
+
+Zookeeper running on 2181:
+>> docker run -d -p 2181:2181 --name zookeeper jplock/zookeeper
+
+Kafka running on 9092:
+>> docker run -d --name kafka --link zookeeper:zookeeper ches/kafka
+
+List all the running containers:
+>> docker ps
+	
+Create a topic
+	>> docker run --rm ches/kafka kafka-topics.sh --create --topic test --replication-factor 1 --partitions 1 --zookeeper 172.17.0.2:2181
+Produce a message:
+>> docker run --rm --interactive ches/kafka kafka-console-producer.sh --topic test --broker-list 172.17.0.3:9092
+
+Open other terminal session and consume a message:
+>> docker run --rm ches/kafka kafka-console-consumer.sh --topic test --from-beginning --zookeeper 172.17.0.2:2181
